@@ -1,6 +1,6 @@
 {
   "name": "com.hibzz.packageeditor",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "displayName": "hibzz.packageeditor",
   "description": "A tool for Unity to edit a git package within the package manager",
   "author": {

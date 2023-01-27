@@ -58,7 +58,8 @@ namespace Hibzz.PackageEditor
 
 			// create a symbolic link to the packages folder
 			UpdateProgress("Creating symbolic link to the cloned repository", 5);
-			CreateSymlink(path, Path.GetFullPath("Packages\\"));
+			string destination = Path.GetFullPath("Packages\\") + packageInfo.name;
+			CreateSymlink(source: path, destination);
 
 			// Perform the serialization / save
 			UpdateProgress("Serializing Database", 6);
@@ -71,6 +72,18 @@ namespace Hibzz.PackageEditor
 		// switch from embed mode to git
 		public void SwitchToGit(PackageInfo packageInfo)
 		{
+			// remove the package
+			UpdateProgress("Removing the symlink", 2);
+			string packagePath = Path.GetFullPath("Packages\\") + packageInfo.name;
+			Directory.Delete(packagePath);
+
+			// install the one with the git url from the entries
+			UpdateProgress("Reinstalling git package", 4);
+			var data = Database.Entries.Find((data) => data.Name == packageInfo.name);
+			Client.Add(data.URL);
+
+			// Update the database
+			UpdateProgress("Updating database", 6);
 			Database.Entries.RemoveAll((data) => data.Name == packageInfo.name);
 			PackageEditorDB.Store(Database);
 		}
@@ -117,18 +130,23 @@ namespace Hibzz.PackageEditor
 			// activate the process and wait for it to complete
 			process.Start();
 			process.WaitForExit();
+
+			
 		}
 
 		// Creates a symbolic link between the source and the given destination
 		void CreateSymlink(string source, string destination)
 		{
+			source = source.Substring(0, source.Length - 1);
+
 			// configure the process to create a symlink
 			Process process = new Process()
 			{
 				StartInfo = new ProcessStartInfo()
 				{
-					FileName = "cmd.exe",
-					Arguments = $"mklink /d \"{destination}\" \"{source}\""
+					FileName  = "cmd.exe",
+					Arguments = $"/c mklink /D \"{destination}\" \"{source}\"",
+					Verb      = "runas"
 				}
 			};
 
@@ -137,6 +155,7 @@ namespace Hibzz.PackageEditor
 			process.WaitForExit();
 		}
 
+		// update the progress bar
 		void UpdateProgress(string info, float currentStep)
 		{
 			EditorUtility.DisplayProgressBar(k_ProgressBarName, info, currentStep / k_Steps);
