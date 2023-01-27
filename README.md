@@ -3,6 +3,8 @@
 
 ***A tool for Unity to edit a git package within the package manager***
 
+*Note: This tool is still in development and is not ready for production use.*
+
 ## Installation
 **Via Github**
 This package can be installed in the Unity Package Manager using the following git URL.
@@ -16,5 +18,7 @@ Alternatively, you can download the latest release from the [releases page](http
 Across different Unity projects that I rapidly prototype, I use a lot of scripts that are shared between projects. To keep things streamlined (and shareable), I've created self-contained packages that I can easily import into any project using the Unity Package Manager. However, as I continue to work on the projects, I might find issues or want to add new features/improvements to the packages. To do this, I have to either work on the source repository directly, push an update, and then update the package in the project, or I have to manually copy the files over to the project and replace the UPM package. Both of these options are not ideal, and I wanted to find a better way to quickly iterate on my packages, test them, and then push them to the source repository.
 
 ## How it works
-The package editor is a tool that allows you to edit a package that is installed via the Unity Package Manager. It does this by creating a local copy of the package in the project's `Packages` folder, and then creating a symbolic link to the original package. This allows you to edit the package in the project, and then push the changes to the source repository. The package editor will also automatically update the package in the project when you push changes to the source repository.
+The package editor is a tool that allows you to edit a package that is installed using a git URL via the Unity Package Manager. It does this by creating a local copy of the package in the developer's `Documents/UnityPackageSource/` folder and creating a symbolic link to the local `Packages` folder to create an *Embedded* package. This allows you to edit the package in the project, and then push the changes to the source repository. Then once the you are done, you can revert to the original "production" package using this tool.
+
+This way you can quickly iterate on your packages, across multiple projects, without having to worry about juggling multiple repositories or manually copying files over.
 

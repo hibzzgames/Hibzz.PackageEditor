@@ -8,9 +8,6 @@ using UnityEngine.UIElements;
 
 using PackageInfo = UnityEditor.PackageManager.PackageInfo;
 using Debug = UnityEngine.Debug;
-using System.Linq;
-using System.IO;
-using System.Runtime.Remoting.Messaging;
 
 namespace Hibzz.PackageEditor
 {
@@ -23,14 +20,8 @@ namespace Hibzz.PackageEditor
 			PackageManagerExtensions.RegisterExtension(new PackageEditorUI());
 		}
 
-		public PackageEditorUI()
-		{
-			// reload the editor ui
-			editorDB = PackageEditorDB.Reload();
-		}
-
-		// A reference to the Package Editor's Database (local to the project)
-		PackageEditorDB editorDB = null;
+		// The main object representing the PackageEditor
+		PackageEditor packageEditor = new PackageEditor();
 
 		// The root element of the extension UI
 		VisualElement root;
@@ -65,39 +56,26 @@ namespace Hibzz.PackageEditor
 				// then add a button to the root
 				Button button = new Button();
 				button.text = "Switch to development mode";
-				button.clicked += () => SwitchToEmbed(packageInfo);
+				button.clicked += () => packageEditor.SwitchToEmbed(packageInfo);
 				root.Add(button);
 			}
 			else if(packageInfo.source == PackageSource.Embedded)
 			{
+				// no package editor found
+				if(packageEditor is null) { return; }
+
 				// no database found
-				if(editorDB is null) { return; }
+				if (packageEditor.Database is null) { return; }
 
 				// database has no entry of the package
-				if(!editorDB.Entries.Any((data) => data.Name == packageInfo.name)) { return; }
+				if(!packageEditor.IsPackageInDatabase(packageInfo.name)) { return; }
 
 				// data base has entry of the package... so, add the button to revert to production
 				Button button = new Button();
 				button.text = "Revert to production mode";
-				button.clicked += () => SwitchToGit(packageInfo);
+				button.clicked += () => packageEditor.SwitchToGit(packageInfo);
 				root.Add(button);
 			}
-		}
-
-		void SwitchToEmbed(PackageInfo packageInfo)
-		{
-			// the package id for a package installed with git is `package_name@package_giturl`
-			// so we extract the url out
-			string repoUrl = packageInfo.packageId.Substring(packageInfo.packageId.IndexOf('@') + 1);
-
-			
-			PackageEditorDB.Store(editorDB);
-		}
-
-		void SwitchToGit(PackageInfo packageInfo) 
-		{
-			editorDB.Entries.RemoveAll((data) => data.Name == packageInfo.name);
-			PackageEditorDB.Store(editorDB);
 		}
 	}
 }
