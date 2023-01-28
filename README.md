@@ -3,7 +3,7 @@
 
 ***A tool for Unity to edit a git package within the package manager***
 
-*Note: This tool is still in development and is not ready for production use.*
+![Untitled](https://user-images.githubusercontent.com/37605842/215235067-a627f9cd-ac5b-4d8c-b06a-39cbd643d522.png)
 
 ## Installation
 **Via Github**
