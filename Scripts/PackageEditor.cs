@@ -86,6 +86,9 @@ namespace Hibzz.PackageEditor
 			UpdateProgress("Updating database", 6);
 			Database.Entries.RemoveAll((data) => data.Name == packageInfo.name);
 			PackageEditorDB.Store(Database);
+
+			// Done!
+			EditorUtility.ClearProgressBar();
 		}
 
 		// check if the given repo is part of the database
