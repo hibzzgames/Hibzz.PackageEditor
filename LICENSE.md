@@ -1,4 +1,4 @@
-[Hibzz PackageEditor](https://github.com/Hibzz-Games/Hibzz.PackageEditor) © 2023 by [Hibzz Games](hibzz.games) is licensed under [CC BY 4.0](http://creativecommons.org/licenses/by/4.0/)
+[Hibzz PackageEditor](https://github.com/hibzzgames/Hibzz.PackageEditor) © 2023 by [Hibzz Games](hibzz.games) is licensed under [CC BY 4.0](http://creativecommons.org/licenses/by/4.0/)
 
 ```
 Creative Commons Corporation ("Creative Commons") is not a law firm and
